@@ -29,7 +29,7 @@ autoscaling:
 # Use: terraform output database_connection_info
 # For production, consider using Kubernetes Secrets for DB_PASSWORD
 configMap:
-  # Database Configuration - Update these values from RDS outputs
+  # Database Configuration - Placeholders are commited to git. Real secrets will be placed for testing purposes
   DB_HOST: ""  # Set from: terraform output -raw rds_instance_address
   DB_NAME: "mydb"  # Set from: var.db_name
   DB_USER: "admin"  # Set from: var.db_username
