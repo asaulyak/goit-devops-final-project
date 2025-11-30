@@ -1,0 +1,52 @@
+# Django Application Configuration
+image:
+  repository: ""  # Will be set from ECR repository URL
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+# Deployment Configuration
+deployment:
+  replicas: 2
+  name: django-app
+
+# Service Configuration
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8000
+  name: django-app-service
+
+# HPA Configuration
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 70
+
+# ConfigMap - Environment Variables
+# Note: Database credentials should be set from RDS outputs after infrastructure deployment
+# Use: terraform output database_connection_info
+# For production, consider using Kubernetes Secrets for DB_PASSWORD
+configMap:
+  # Database Configuration - Update these values from RDS outputs
+  DB_HOST: ""  # Set from: terraform output -raw rds_instance_address
+  DB_NAME: "mydb"  # Set from: var.db_name
+  DB_USER: "admin"  # Set from: var.db_username
+  DB_PASSWORD: ""  # Set from: var.db_password (use Secret in production)
+  DB_PORT: "5432"  # Set from: terraform output -raw rds_instance_port
+
+# Resource Limits
+resources:
+  requests:
+    cpu: "200m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+# Labels
+labels:
+  app: django-app
+  version: v1
+
